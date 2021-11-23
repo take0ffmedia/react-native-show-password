@@ -6,7 +6,7 @@ import { ReactNativeShowPasswordView } from '@takeoffmedia/react-native-show-pas
 export default function App() {
   return (
     <View style={styles.container}>
-      <ReactNativeShowPasswordViewManager color="#32a852" style={styles.box} />
+      <ReactNativeShowPasswordView color="#32a852" style={styles.box} />
     </View>
   );
 }
