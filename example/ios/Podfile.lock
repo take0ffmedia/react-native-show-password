@@ -245,7 +245,7 @@ PODS:
     - React-Core (= 0.63.4)
     - React-cxxreact (= 0.63.4)
     - React-jsi (= 0.63.4)
-  - takeoffmedia-react-native-show-password (0.1.0):
+  - takeoffmedia-react-native-show-password (0.1.1):
     - React-Core
   - Yoga (1.14.0)
 
@@ -367,9 +367,9 @@ SPEC CHECKSUMS:
   React-RCTText: 5c51df3f08cb9dedc6e790161195d12bac06101c
   React-RCTVibration: ae4f914cfe8de7d4de95ae1ea6cc8f6315d73d9d
   ReactCommon: 73d79c7039f473b76db6ff7c6b159c478acbbb3b
-  takeoffmedia-react-native-show-password: 65173ce80e0f32e3352716c15191eaacb2ce6ea1
+  takeoffmedia-react-native-show-password: 36b1f1d3ba7a75bcd0b4d78c931ce5026e80114a
   Yoga: 4bd86afe9883422a7c4028c00e34790f560923d6
 
 PODFILE CHECKSUM: ef0a3736d016bc0da69c58bcd56dd6e5e8724c5d
 
-COCOAPODS: 1.10.1
+COCOAPODS: 1.10.2

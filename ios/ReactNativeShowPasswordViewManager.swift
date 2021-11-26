@@ -1,10 +1,14 @@
 @objc(ReactNativeShowPasswordViewManager)
 class ReactNativeShowPasswordViewManager: RCTViewManager {
+    
 
-  override func view() -> (ReactNativeShowPasswordView) {
-    return ReactNativeShowPasswordView()
+  override func view() -> (HideShowPasswordTextField) {
+      var passwordField: HideShowPasswordTextField
+      passwordField = HideShowPasswordTextField()
+    return passwordField
   }
 }
+
 
 class ReactNativeShowPasswordView : UIView {
 
