@@ -1,12 +1,15 @@
 import * as React from 'react';
 
 import { StyleSheet, View } from 'react-native';
-import { ReactNativeShowPasswordView } from '@takeoffmedia/react-native-show-password';
+import ReactNativeShowPasswordView from '@takeoffmedia/react-native-show-password';
 
 export default function App() {
   return (
     <View style={styles.container}>
-      <ReactNativeShowPasswordView style={styles.box} />
+      <ReactNativeShowPasswordView
+        style={styles.box}
+        onChange={(value) => console.log('change', value)}
+      />
     </View>
   );
 }

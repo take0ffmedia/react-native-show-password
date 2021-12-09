@@ -1,6 +1,7 @@
 @objc(ReactNativeShowPasswordViewManager)
 class ReactNativeShowPasswordViewManager: RCTViewManager {
   var passwordTextField: HideShowPasswordTextField!
+  @objc var onChange:RCTDirectEventBlock? = nil
 
   override func view() -> (HideShowPasswordTextField) {
       passwordTextField = HideShowPasswordTextField(frame: CGRect(x: 0, y: 0, width: 100, height: 50))
@@ -13,9 +14,12 @@ class ReactNativeShowPasswordViewManager: RCTViewManager {
       passwordTextField.clipsToBounds = true
       passwordTextField.layer.cornerRadius = 0
       passwordTextField.rightView?.tintColor = UIColor(red: 0.204, green: 0.624, blue: 0.847, alpha: 1)
+      
       return passwordTextField
   }
+    
 }
+
 
 class ReactNativeShowPasswordView : UIView {
 

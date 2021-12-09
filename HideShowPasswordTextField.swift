@@ -14,6 +14,14 @@ protocol HideShowPasswordTextFieldDelegate: AnyObject {
 
 public class HideShowPasswordTextField: UITextField {
     weak var passwordDelegate: HideShowPasswordTextFieldDelegate?
+    @objc var isVisible: Bool = false
+    @objc var onChange:RCTBubblingEventBlock? = nil
+
+
+    public override func didSetProps(_ changedProps: [String]!) {
+        viewWasToggled(passwordToggleVisibilityView, isSelected: self.isVisible)
+    }
+
     var preferredFont: UIFont? {
         didSet {
             self.font = nil
@@ -22,14 +30,14 @@ public class HideShowPasswordTextField: UITextField {
             }
         }
     }
-    
+
     override public var isSecureTextEntry: Bool {
         didSet {
             if !self.isSecureTextEntry {
                 self.font = nil
                 self.font = self.preferredFont
             }
-            
+
             // Hack to prevent text from getting cleared when switching secure entry
             // https://stackoverflow.com/a/49771445/1417922
             if self.isFirstResponder {
@@ -38,21 +46,21 @@ public class HideShowPasswordTextField: UITextField {
         }
     }
     fileprivate var passwordToggleVisibilityView: PasswordToggleVisibilityView!
-    
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupViews()
     }
-    
+
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }
-    
+
     override public func awakeFromNib() {
         super.awakeFromNib()
         setupViews()
     }
-    
+
     override public func becomeFirstResponder() -> Bool {
         // Hack to prevent text from getting cleared when switching secure entry
         // https://stackoverflow.com/a/49771445/1417922
@@ -77,12 +85,11 @@ extension HideShowPasswordTextField {
 // MARK: PasswordToggleVisibilityDelegate
 extension HideShowPasswordTextField: PasswordToggleVisibilityDelegate {
     func viewWasToggled(_ passwordToggleVisibilityView: PasswordToggleVisibilityView, isSelected selected: Bool) {
-        
         // hack to fix a bug with padding when switching between secureTextEntry state
         let hackString = self.text
         self.text = " "
         self.text = hackString
-        
+
         // hack to save our correct font.  The order here is VERY finicky
         self.isSecureTextEntry = !selected
     }
@@ -96,6 +103,10 @@ extension HideShowPasswordTextField {
 //        } else {
 //            passwordToggleVisibilityView.checkmarkVisible = false
 //        }
+        let onChangeCallback = self.onChange;
+        if((onChangeCallback) != nil) {
+            onChangeCallback!(["value": self.text! as String])
+        }
     }
 }
 
@@ -110,10 +121,10 @@ extension HideShowPasswordTextField {
         self.rightView = passwordToggleVisibilityView
         self.font = self.preferredFont
         self.addTarget(self, action: #selector(HideShowPasswordTextField.passwordTextChanged(_:)), for: .editingChanged)
-        
+
         // if we don't do this, the eye flies in on textfield focus!
         self.rightView?.frame = self.rightViewRect(forBounds: self.bounds)
-        
+
         self.rightViewMode = .whileEditing
         // left view hack to add padding
         self.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 10, height: 3))
