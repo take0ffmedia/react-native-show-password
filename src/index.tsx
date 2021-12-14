@@ -46,6 +46,7 @@ type ReactNativeShowPasswordProps = {
     | 'yahoo'
     | 'done'
     | 'emergency-call';
+  returnKeyTypeProp?: string;
   icon?: {
     visible: () => ReactNode;
     hidden: () => ReactNode;
@@ -53,6 +54,7 @@ type ReactNativeShowPasswordProps = {
   onChange?: (event: any) => void;
   onFocus?: (event: any) => void;
   onBlur?: (event: any) => void;
+  ref?: (ref: ReactNativeShowPasswordMethods) => void;
 };
 
 const ComponentName = 'ReactNativeShowPasswordView';
@@ -88,19 +90,19 @@ export default React.forwardRef<
 
     function focus() {
       if (floatingLabel.current) {
-        floatingLabel.current.floatLabel();
+        (floatingLabel.current as any).floatLabel();
       }
       if (underline.current) {
-        underline.current.expandLine();
+        (underline.current as any).expandLine();
       }
     }
 
     function blur() {
       if (floatingLabel.current) {
-        floatingLabel.current.sinkLabel();
+        (floatingLabel.current as any).sinkLabel();
       }
       if (underline.current) {
-        underline.current.shrinkLine();
+        (underline.current as any).shrinkLine();
       }
     }
 
@@ -124,7 +126,7 @@ export default React.forwardRef<
           }}
           onFocus={() => focus()}
           onBlur={() => blur()}
-          ref={input}
+          ref={input as any}
         />
         <FloatingLabel
           // isFocused={this.state.isFocused}
