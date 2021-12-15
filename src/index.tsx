@@ -136,7 +136,9 @@ export default React.forwardRef<
     return (
       <View
         style={[styles.container, style]}
-        onStartShouldSetResponder={() => focus()}
+        onStartShouldSetResponder={() =>
+          ReactNativeShowPasswordModule.focus() as any
+        }
       >
         <ReactNativeShowPasswordView
           {...{ color, ...props }}
