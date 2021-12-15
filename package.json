@@ -1,6 +1,6 @@
 {
   "name": "@takeoffmedia/react-native-show-password",
-  "version": "0.1.1",
+  "version": "0.1.4",
   "description": "Package show password component react native",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
@@ -36,13 +36,13 @@
     "ios",
     "android"
   ],
-  "repository": "https://github.com/take0ffmedia/react-native-show-password.git/takeoffmedia-react-native-show-password",
+  "repository": "https://github.com/take0ffmedia/react-native-show-password",
   "author": "Jonathan Machado <jonathanm@takeoffmedia.com> (https://github.com/take0ffmedia/react-native-show-password.git)",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/take0ffmedia/react-native-show-password.git/takeoffmedia-react-native-show-password/issues"
+    "url": "https://github.com/take0ffmedia/react-native-show-password/issues"
   },
-  "homepage": "https://github.com/take0ffmedia/react-native-show-password.git/takeoffmedia-react-native-show-password#readme",
+  "homepage": "https://github.com/take0ffmedia/react-native-show-password#readme",
   "publishConfig": {
     "registry": "https://registry.npmjs.org/"
   },
@@ -53,6 +53,7 @@
     "@types/jest": "^26.0.0",
     "@types/react": "^16.9.19",
     "@types/react-native": "0.62.13",
+    "@types/react-native-vector-icons": "^6.4.10",
     "commitlint": "^11.0.0",
     "eslint": "^7.2.0",
     "eslint-config-prettier": "^7.0.0",
@@ -143,5 +144,9 @@
         }
       ]
     ]
+  },
+  "dependencies": {
+    "react-native-svg": "^12.1.1",
+    "react-native-vector-icons": "^9.0.0"
   }
 }

@@ -1,12 +1,27 @@
 import * as React from 'react';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
 import { StyleSheet, View } from 'react-native';
-import { ReactNativeShowPasswordView } from '@takeoffmedia/react-native-show-password';
+import ReactNativeShowPasswordView from '@takeoffmedia/react-native-show-password';
 
 export default function App() {
   return (
     <View style={styles.container}>
-      <ReactNativeShowPasswordView color="#32a852" style={styles.box} />
+      <ReactNativeShowPasswordView
+        style={styles.box}
+        inputStyle={styles.input}
+        labelStyle={styles.label}
+        color="#000000"
+        errorColor="#ff0000"
+        icon={{
+          visible: () => <Icon name={'visibility'} size={25} color={'black'} />,
+          hidden: () => (
+            <Icon name={'visibility-off'} size={25} color={'black'} />
+          ),
+        }}
+        placeholder="Password"
+        onChange={(value) => console.log('change', value)}
+      />
     </View>
   );
 }
@@ -16,10 +31,16 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+    padding: 20,
   },
   box: {
-    width: 60,
-    height: 60,
-    marginVertical: 20,
+    width: '100%',
+    height: 50,
+  },
+  input: {
+    fontSize: 15,
+  },
+  label: {
+    fontSize: 15,
   },
 });
