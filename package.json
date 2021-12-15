@@ -1,6 +1,6 @@
 {
   "name": "@takeoffmedia/react-native-show-password",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Package show password component react native",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
