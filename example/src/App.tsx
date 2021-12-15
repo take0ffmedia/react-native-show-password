@@ -10,6 +10,9 @@ export default function App() {
       <ReactNativeShowPasswordView
         style={styles.box}
         inputStyle={styles.input}
+        labelStyle={styles.label}
+        color="#000000"
+        errorColor="#ff0000"
         icon={{
           visible: () => <Icon name={'visibility'} size={25} color={'black'} />,
           hidden: () => (
@@ -35,6 +38,9 @@ const styles = StyleSheet.create({
     height: 50,
   },
   input: {
-    fontSize: 8,
+    fontSize: 15,
+  },
+  label: {
+    fontSize: 15,
   },
 });

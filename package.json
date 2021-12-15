@@ -36,13 +36,13 @@
     "ios",
     "android"
   ],
-  "repository": "https://github.com/take0ffmedia/react-native-show-password.git/takeoffmedia-react-native-show-password",
+  "repository": "https://github.com/take0ffmedia/react-native-show-password",
   "author": "Jonathan Machado <jonathanm@takeoffmedia.com> (https://github.com/take0ffmedia/react-native-show-password.git)",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/take0ffmedia/react-native-show-password.git/takeoffmedia-react-native-show-password/issues"
+    "url": "https://github.com/take0ffmedia/react-native-show-password/issues"
   },
-  "homepage": "https://github.com/take0ffmedia/react-native-show-password.git/takeoffmedia-react-native-show-password#readme",
+  "homepage": "https://github.com/take0ffmedia/react-native-show-password#readme",
   "publishConfig": {
     "registry": "https://registry.npmjs.org/"
   },

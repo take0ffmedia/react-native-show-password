@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import React, { ReactNode, useRef, useState } from 'react';
+import React, { ReactNode, useImperativeHandle, useRef, useState } from 'react';
 import {
   requireNativeComponent,
   UIManager,
@@ -9,15 +9,23 @@ import {
   StyleSheet,
   TextStyle,
   StyleProp,
-  TextInput,
   NativeModules,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import Underline from './lib/Underline';
 import FloatingLabel from './lib/FloatingLabel';
 
-const ReactNativeShowPasswordModule =
-  NativeModules.ReactNativeShowPasswordViewManager;
+type ReactNativeShowPasswordModuleMethodsType = {
+  ReactNativeShowPasswordViewManager: {
+    focus(): void;
+  };
+};
+
+const {
+  ReactNativeShowPasswordViewManager: ReactNativeShowPasswordModule,
+}: ReactNativeShowPasswordModuleMethodsType = NativeModules as ReactNativeShowPasswordModuleMethodsType;
+
+export { ReactNativeShowPasswordModule };
 
 const LINKING_ERROR =
   `The package '@takeoffmedia/react-native-show-password' doesn't seem to be linked. Make sure: \n\n` +
@@ -29,9 +37,12 @@ export type ReactNativeShowPasswordMethods = {
 };
 
 type ReactNativeShowPasswordProps = {
+  color?: string;
+  errorColor?: string;
   placeholder?: string;
   style?: StyleProp<TextStyle>;
   inputStyle?: StyleProp<TextStyle>;
+  labelStyle?: StyleProp<TextStyle>;
   isVisible?: boolean;
   error?: boolean;
   returnKeyType?:
@@ -73,22 +84,27 @@ export default React.forwardRef<
   (
     {
       error,
+      errorColor = '#ff0000',
+      color = '#000',
       placeholder,
       icon,
       style,
       inputStyle,
+      labelStyle,
       onChange: onChangeText,
+      onBlur,
       returnKeyType,
       ...props
     }: ReactNativeShowPasswordProps,
-    _ref
+    ref
   ) => {
     const [isVisible, setIsVisible] = useState(false);
+    const [value, setValue] = useState('');
     const input = useRef(null);
     const underline = useRef(null);
     const floatingLabel = useRef(null);
 
-    function focus() {
+    function focusAnimation() {
       if (floatingLabel.current) {
         (floatingLabel.current as any).floatLabel();
       }
@@ -97,54 +113,62 @@ export default React.forwardRef<
       }
     }
 
-    function blur() {
-      if (floatingLabel.current) {
+    function blurAnimation() {
+      if (floatingLabel.current && value === '') {
         (floatingLabel.current as any).sinkLabel();
       }
       if (underline.current) {
         (underline.current as any).shrinkLine();
       }
+      if (onBlur) {
+        onBlur({});
+      }
     }
+
+    function focus(): any {
+      ReactNativeShowPasswordModule.focus();
+    }
+
+    useImperativeHandle(ref, () => ({
+      focus,
+    }));
 
     return (
       <View
         style={[styles.container, style]}
-        onStartShouldSetResponder={() => ReactNativeShowPasswordModule.focus()}
+        onStartShouldSetResponder={() => focus()}
       >
-        <TextInput
-          style={[styles.container, { marginBottom: 40, height: 40 }]}
-          returnKeyType="done"
-        />
         <ReactNativeShowPasswordView
-          {...{ ...props }}
+          {...{ color, ...props }}
           style={[style, error ? styles.inputError : {}, styles.input]}
           inputStyle={inputStyle}
           returnKeyTypeProp={returnKeyType}
           isVisible={isVisible}
           onChange={({ nativeEvent }) => {
+            setValue(nativeEvent.value);
             onChangeText ? onChangeText(nativeEvent.value) : {};
           }}
-          onFocus={() => focus()}
-          onBlur={() => blur()}
+          onFocus={() => focusAnimation()}
+          onBlur={() => blurAnimation()}
           ref={input as any}
         />
         <FloatingLabel
           // isFocused={this.state.isFocused}
           ref={floatingLabel}
-          focusHandler={() => ReactNativeShowPasswordModule.focus()}
+          focusHandler={() => focus()}
           label={placeholder || ''}
-          labelColor={error ? 'red' : 'black'}
-          highlightColor={error ? 'red' : 'black'}
+          labelColor={error ? errorColor : color}
+          highlightColor={error ? errorColor : color}
           duration={150}
           dense={false}
-          // hasValue={false}
-          style={styles.labelStyle}
+          hasValue={value !== ''}
+          style={[labelStyle, styles.labelStyle]}
         />
         <Underline
           ref={underline}
-          highlightColor={error ? 'red' : 'black'}
+          highlightColor={error ? errorColor : color}
           duration={50}
-          borderColor={error ? 'red' : 'black'}
+          borderColor={error ? errorColor : color}
         />
         <TouchableOpacity
           onPress={() => setIsVisible(!isVisible)}
@@ -171,8 +195,6 @@ export default React.forwardRef<
 
 const styles = StyleSheet.create({
   container: {
-    borderWidth: 1,
-    borderColor: 'grey',
     justifyContent: 'flex-end',
   },
   input: {
@@ -184,7 +206,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
   },
   button: {
-    width: 40,
+    width: 60,
     height: '100%',
     alignSelf: 'flex-end',
     zIndex: 3,
@@ -192,8 +214,5 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  labelStyle: {
-    // backgroundColor: 'red',
-    // fontSize: 12,
-  },
+  labelStyle: {},
 });

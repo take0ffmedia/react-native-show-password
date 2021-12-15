@@ -19,9 +19,15 @@ public class HideShowPasswordTextField: UITextField {
     @objc var onBlur:RCTBubblingEventBlock? = nil
     @objc var onFocus:RCTBubblingEventBlock? = nil
     @objc var inputStyle: NSDictionary? = nil
+    @objc var labelStyle: NSDictionary? = nil
     @objc var returnKeyTypeProp: String? = nil
+    @objc var color: String = "" {
+      didSet {
+        self.textColor = hexStringToUIColor(hexColor: color)
+      }
+    }
 
-    let padding = UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 55)
+    let padding = UIEdgeInsets(top: 0, left: 12, bottom: 0, right: 55)
     override open func textRect(forBounds bounds: CGRect) -> CGRect {
         return bounds.inset(by: padding)
     }
@@ -100,36 +106,24 @@ public class HideShowPasswordTextField: UITextField {
         }
         return success
     }
-    
 }
 
 // MARK: UITextFieldDelegate needed calls
 // Implement UITextFieldDelegate when you use this, and forward these calls to this class!
 extension HideShowPasswordTextField {
     @objc func passwordTextBlur(_ textField: UITextField) {
-//        passwordToggleVisibilityView.eyeState = PasswordToggleVisibilityView.EyeState.closed
-//        self.isSecureTextEntry = !isSelected
         let onBlurCallback = self.onBlur;
         if((onBlurCallback) != nil) {
             onBlurCallback!(["value": self.text! as String])
         }
     }
     @objc func passwordTextFocus(_ textField: UITextField) {
-//        passwordToggleVisibilityView.eyeState = PasswordToggleVisibilityView.EyeState.closed
-//        self.isSecureTextEntry = !isSelected
         let onFocusCallback = self.onFocus;
         if((onFocusCallback) != nil) {
             onFocusCallback!(["value": self.text! as String])
         }
     }
-    
     @objc func passwordTextReturn(_ textField: UITextField) {
-//        passwordToggleVisibilityView.eyeState = PasswordToggleVisibilityView.EyeState.closed
-//        self.isSecureTextEntry = !isSelected
-//        let onFocusCallback = self.onFocus;
-//        if((onFocusCallback) != nil) {
-//            onFocusCallback!(["value": self.text! as String])
-//        }
         let _ = self.resignFirstResponder()
     }
 }
@@ -144,6 +138,17 @@ extension HideShowPasswordTextField: PasswordToggleVisibilityDelegate {
 
         // hack to save our correct font.  The order here is VERY finicky
         self.isSecureTextEntry = !selected
+
+        var fontSize = 15
+
+        if (self.inputStyle != nil) {
+            if((self.inputStyle!["fontSize"]) != nil) {
+                fontSize = Int(truncating: self.inputStyle!["fontSize"] as! NSNumber)
+            }
+        }
+
+        let customFont:UIFont = UIFont.systemFont(ofSize: CGFloat(fontSize), weight: UIFont.Weight.regular)
+        self.font = customFont
     }
 }
 
@@ -171,8 +176,6 @@ extension HideShowPasswordTextField {
 //        passwordToggleVisibilityView.checkmarkVisible = false
         self.keyboardType = .asciiCapable
         self.rightView = passwordToggleVisibilityView
-        let customFont:UIFont = UIFont.init(name: (self.font?.fontName)!, size: 18.0)!
-        self.font = customFont
         self.addTarget(self, action: #selector(HideShowPasswordTextField.passwordTextChanged(_:)), for: .editingChanged)
         self.addTarget(self, action: #selector(HideShowPasswordTextField.passwordTextBlur(_:)), for: .editingDidEnd)
         self.addTarget(self, action: #selector(HideShowPasswordTextField.passwordTextFocus(_:)), for: .editingDidBegin)
@@ -185,5 +188,20 @@ extension HideShowPasswordTextField {
 //        self.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 10, height: 3))
 //        self.leftViewMode = .always
     }
-    
+
+    func hexStringToUIColor(hexColor: String) -> UIColor {
+      let stringScanner = Scanner(string: hexColor)
+
+      if(hexColor.hasPrefix("#")) {
+        stringScanner.scanLocation = 1
+      }
+      var color: UInt32 = 0
+      stringScanner.scanHexInt32(&color)
+
+      let r = CGFloat(Int(color >> 16) & 0x000000FF)
+      let g = CGFloat(Int(color >> 8) & 0x000000FF)
+      let b = CGFloat(Int(color) & 0x000000FF)
+
+      return UIColor(red: r / 255.0, green: g / 255.0, blue: b / 255.0, alpha: 1)
+    }
 }
